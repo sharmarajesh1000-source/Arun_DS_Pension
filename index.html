@@ -167,7 +167,7 @@
             border-radius: 0;
             padding: 20px;
             margin-bottom: 0;
-            height: 400px;
+            height: 500px;
             position: relative;
             overflow: hidden;
             border-bottom: 1px solid #eee;
@@ -394,7 +394,7 @@
             }
             
             .chart-container {
-                height: 300px;
+                height: 350px;
                 padding: 15px;
             }
             
@@ -443,7 +443,7 @@
             }
             
             .chart-container {
-                height: 250px;
+                height: 300px;
             }
             
             .tab {
@@ -469,7 +469,7 @@
         }
 
         .dashboard-chart-container {
-            height: 450px;
+            height: 550px;
             border-radius: 0 0 var(--border-radius) var(--border-radius);
         }
     </style>
@@ -523,8 +523,6 @@
                 </div>
                 <canvas id="totalChart"></canvas>
             </div>
-            
-            <!-- No data table on Dashboard as requested -->
         </div>
 
         <!-- Nest Pension Tab -->
@@ -910,6 +908,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            bottom: 30, // Extra padding for X-axis
+                            top: 20,
+                            left: 10,
+                            right: 10
+                        }
+                    },
                     plugins: {
                         legend: {
                             position: 'top',
@@ -919,12 +925,26 @@
                         }
                     },
                     scales: {
+                        x: {
+                            ticks: {
+                                padding: 10,
+                                maxRotation: 45,
+                                minRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
                         y: {
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
                                     return '£' + value.toLocaleString();
-                                }
+                                },
+                                padding: 10
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
                             }
                         }
                     }
@@ -964,6 +984,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            bottom: 30, // Extra padding for X-axis
+                            top: 20,
+                            left: 10,
+                            right: 10
+                        }
+                    },
                     plugins: {
                         legend: {
                             position: 'top',
@@ -973,12 +1001,26 @@
                         }
                     },
                     scales: {
+                        x: {
+                            ticks: {
+                                padding: 10,
+                                maxRotation: 45,
+                                minRotation: 0
+                            },
+                            grid: {
+                                display: false
+                            }
+                        },
                         y: {
                             beginAtZero: true,
                             ticks: {
                                 callback: function(value) {
                                     return '£' + value.toLocaleString();
-                                }
+                                },
+                                padding: 10
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
                             }
                         }
                     }
