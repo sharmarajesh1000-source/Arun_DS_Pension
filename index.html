@@ -109,7 +109,6 @@
             display: none;
             background: var(--card-bg);
             border-radius: 0 0 var(--border-radius) var(--border-radius);
-            padding: 20px;
             box-shadow: var(--shadow);
             margin-bottom: 25px;
         }
@@ -129,6 +128,7 @@
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
+            padding: 20px;
         }
 
         .card {
@@ -164,17 +164,20 @@
 
         .chart-container {
             background: white;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            height: 350px;
+            border-radius: 0;
+            padding: 20px;
+            margin-bottom: 0;
+            height: 400px;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid #eee;
         }
 
         .chart-header {
             margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .chart-title {
@@ -183,13 +186,14 @@
             font-weight: 600;
         }
 
+        .data-section {
+            padding: 20px;
+        }
+
         .data-table-container {
             background: white;
-            border-radius: var(--border-radius);
-            padding: 0;
-            box-shadow: var(--shadow);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
             overflow: hidden;
-            margin-bottom: 25px;
         }
 
         .table-header {
@@ -258,8 +262,7 @@
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 15px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #eee;
+            padding: 20px 20px 0;
             font-size: 1.5rem;
             display: flex;
             align-items: center;
@@ -301,6 +304,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            padding: 0 20px;
             flex-wrap: wrap;
         }
 
@@ -336,6 +340,7 @@
             display: none;
             gap: 10px;
             margin-bottom: 15px;
+            padding: 0 20px;
             flex-wrap: wrap;
         }
 
@@ -370,13 +375,10 @@
                 font-size: 0.9rem;
             }
             
-            .tab-content {
-                padding: 15px;
-            }
-            
             .summary-cards {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
+                padding: 15px;
             }
             
             .card {
@@ -392,8 +394,8 @@
             }
             
             .chart-container {
-                height: 280px;
-                padding: 12px;
+                height: 300px;
+                padding: 15px;
             }
             
             .chart-title {
@@ -410,6 +412,7 @@
             
             .pension-name {
                 font-size: 1.3rem;
+                padding: 15px 15px 0;
             }
             
             .data-table {
@@ -423,6 +426,14 @@
             .btn {
                 padding: 8px 12px;
                 font-size: 0.85rem;
+            }
+            
+            .actions, .mobile-actions {
+                padding: 0 15px;
+            }
+            
+            .data-section {
+                padding: 15px;
             }
         }
 
@@ -458,8 +469,8 @@
         }
 
         .dashboard-chart-container {
-            height: 400px;
-            margin-bottom: 0;
+            height: 450px;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
         }
     </style>
 </head>
@@ -513,7 +524,7 @@
                 <canvas id="totalChart"></canvas>
             </div>
             
-            <!-- Data table and Add Year button removed from Dashboard as requested -->
+            <!-- No data table on Dashboard as requested -->
         </div>
 
         <!-- Nest Pension Tab -->
@@ -542,22 +553,24 @@
                 <canvas id="nestChart"></canvas>
             </div>
             
-            <div class="data-table-container">
-                <div class="table-header">
-                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+            <div class="data-section">
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Value (£)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nestTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Value (£)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="nestTableBody">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -587,22 +600,24 @@
                 <canvas id="royalLondonChart"></canvas>
             </div>
             
-            <div class="data-table-container">
-                <div class="table-header">
-                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+            <div class="data-section">
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Value (£)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="royalLondonTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Value (£)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="royalLondonTableBody">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -632,22 +647,24 @@
                 <canvas id="baringaChart"></canvas>
             </div>
             
-            <div class="data-table-container">
-                <div class="table-header">
-                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+            <div class="data-section">
+                <div class="data-table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Value (£)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="baringaTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Value (£)</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="baringaTableBody">
-                        <!-- Will be populated by JavaScript -->
-                    </tbody>
-                </table>
             </div>
         </div>
 
