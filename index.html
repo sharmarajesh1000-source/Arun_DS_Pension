@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arun Pensions Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent1: #7209b7;
+            --accent2: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            overflow-x: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            height: 400px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .data-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .year-header {
+            background: var(--secondary);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .pension-name {
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-bottom: 1px solid #eee;
+                border-left: 3px solid transparent;
+            }
+            
+            .tab.active {
+                border-left: 3px solid var(--primary);
+                border-bottom: 1px solid #eee;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Arun Pensions Dashboard</h1>
+            <p class="subtitle">Track and manage your pension investments</p>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">Dashboard</div>
+            <div class="tab" data-tab="nest">Nest Pension</div>
+            <div class="tab" data-tab="royal-london">Royal London</div>
+            <div class="tab" data-tab="baringa">Baringa</div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <h2 class="year-header">Pension Summary</h2>
+            
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Total Value (2023)</h3>
+                    <div class="value" id="total-2023">£4,200</div>
+                </div>
+                <div class="card">
+                    <h3>Total Value (2024)</h3>
+                    <div class="value" id="total-2024">£5,100</div>
+                </div>
+                <div class="card">
+                    <h3>Total Growth (2023-2024)</h3>
+                    <div class="value" id="growth">+21.4%</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="totalChart"></canvas>
+            </div>
+            
+            <h3>Combined Pension Values</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Nest</th>
+                        <th>Royal London</th>
+                        <th>Baringa</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="combined-table-body">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Nest Pension Tab -->
+        <div class="tab-content" id="nest">
+            <h2 class="pension-name">Nest Pension</h2>
+            
+            <div class="chart-container">
+                <canvas id="nestChart"></canvas>
+            </div>
+            
+            <h3>Yearly Values</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Value (£)</th>
+                    </tr>
+                </thead>
+                <tbody id="nest-table-body">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Royal London Tab -->
+        <div class="tab-content" id="royal-london">
+            <h2 class="pension-name">Royal London</h2>
+            
+            <div class="chart-container">
+                <canvas id="royalLondonChart"></canvas>
+            </div>
+            
+            <h3>Yearly Values</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Value (£)</th>
+                    </tr>
+                </thead>
+                <tbody id="royal-london-table-body">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Baringa Tab -->
+        <div class="tab-content" id="baringa">
+            <h2 class="pension-name">Baringa</h2>
+            
+            <div class="chart-container">
+                <canvas id="baringaChart"></canvas>
+            </div>
+            
+            <h3>Yearly Values</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Value (£)</th>
+                    </tr>
+                </thead>
+                <tbody id="baringa-table-body">
+                    <!-- Will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initial data from the Excel file
+        let pensionData = {
+            nest: {
+                name: "Nest Pension",
+                color: "#4361ee",
+                values: {
+                    2020: 1000,
+                    2021: 1400,
+                    2022: 1500,
+                    2023: 1600,
+                    2024: 1800,
+                    2025: 2000,
+                    2026: 2100,
+                    2027: 2300,
+                    2028: 2500,
+                    2029: 2800,
+                    2030: 3000
+                }
+            },
+            royalLondon: {
+                name: "Royal London",
+                color: "#f72585",
+                values: {
+                    2020: 0,
+                    2021: 0,
+                    2022: 1200,
+                    2023: 2600,
+                    2024: 3300,
+                    2025: 4500,
+                    2026: 5000,
+                    2027: 5500,
+                    2028: 6000,
+                    2029: 6600,
+                    2030: 7800
+                }
+            },
+            baringa: {
+                name: "Baringa",
+                color: "#4cc9f0",
+                values: {
+                    2020: 0,
+                    2021: 0,
+                    2022: 0,
+                    2023: 0,
+                    2024: 0,
+                    2025: 0,
+                    2026: 2500,
+                    2027: 6000,
+                    2028: 10000,
+                    2029: 15000,
+                    2030: 20000
+                }
+            }
+        };
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up tab switching
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Initialize all tables and charts
+            initializeTables();
+            initializeCharts();
+            updateSummaryCards();
+        });
+
+        // Initialize data tables
+        function initializeTables() {
+            // Years from 2018 to 2030
+            const years = Array.from({length: 13}, (_, i) => 2018 + i);
+            
+            // Dashboard table
+            const combinedTableBody = document.getElementById('combined-table-body');
+            combinedTableBody.innerHTML = '';
+            
+            years.forEach(year => {
+                const nestValue = pensionData.nest.values[year] || 0;
+                const royalLondonValue = pensionData.royalLondon.values[year] || 0;
+                const baringaValue = pensionData.baringa.values[year] || 0;
+                const total = nestValue + royalLondonValue + baringaValue;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${year}</td>
+                    <td>£${nestValue.toLocaleString()}</td>
+                    <td>£${royalLondonValue.toLocaleString()}</td>
+                    <td>£${baringaValue.toLocaleString()}</td>
+                    <td><strong>£${total.toLocaleString()}</strong></td>
+                `;
+                combinedTableBody.appendChild(row);
+            });
+            
+            // Individual pension tables
+            initializePensionTable('nest', years);
+            initializePensionTable('royalLondon', years);
+            initializePensionTable('baringa', years);
+        }
+
+        // Initialize individual pension table
+        function initializePensionTable(pensionKey, years) {
+            const tableBody = document.getElementById(`${pensionKey}-table-body`);
+            tableBody.innerHTML = '';
+            
+            years.forEach(year => {
+                const value = pensionData[pensionKey].values[year] || 0;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${year}</td>
+                    <td>
+                        <input type="number" 
+                               value="${value}" 
+                               data-pension="${pensionKey}" 
+                               data-year="${year}"
+                               onchange="updatePensionValue('${pensionKey}', ${year}, this.value)">
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Update pension value when user edits
+        function updatePensionValue(pensionKey, year, value) {
+            pensionData[pensionKey].values[year] = parseInt(value) || 0;
+            
+            // Update tables and charts
+            initializeTables();
+            updateCharts();
+            updateSummaryCards();
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Years from 2018 to 2030
+            const years = Array.from({length: 13}, (_, i) => 2018 + i);
+            
+            // Total combined chart
+            const totalCtx = document.getElementById('totalChart').getContext('2d');
+            const totalData = years.map(year => {
+                return (pensionData.nest.values[year] || 0) + 
+                       (pensionData.royalLondon.values[year] || 0) + 
+                       (pensionData.baringa.values[year] || 0);
+            });
+            
+            new Chart(totalCtx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Total Combined Value',
+                        data: totalData,
+                        borderColor: '#3a0ca3',
+                        backgroundColor: 'rgba(58, 12, 163, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Total Combined Pension Value Over Time'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '£' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Individual pension charts
+            initializePensionChart('nest', years);
+            initializePensionChart('royalLondon', years);
+            initializePensionChart('baringa', years);
+        }
+
+        // Initialize individual pension chart
+        function initializePensionChart(pensionKey, years) {
+            const ctx = document.getElementById(`${pensionKey}Chart`).getContext('2d');
+            const data = years.map(year => pensionData[pensionKey].values[year] || 0);
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: pensionData[pensionKey].name,
+                        data: data,
+                        borderColor: pensionData[pensionKey].color,
+                        backgroundColor: pensionData[pensionKey].color + '20', // Add transparency
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: `${pensionData[pensionKey].name} Value Over Time`
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '£' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts when data changes
+        function updateCharts() {
+            // Destroy existing charts
+            Chart.instances.forEach(instance => instance.destroy());
+            
+            // Reinitialize charts
+            initializeCharts();
+        }
+
+        // Update summary cards
+        function updateSummaryCards() {
+            const total2023 = (pensionData.nest.values[2023] || 0) + 
+                             (pensionData.royalLondon.values[2023] || 0) + 
+                             (pensionData.baringa.values[2023] || 0);
+            
+            const total2024 = (pensionData.nest.values[2024] || 0) + 
+                             (pensionData.royalLondon.values[2024] || 0) + 
+                             (pensionData.baringa.values[2024] || 0);
+            
+            const growth = ((total2024 - total2023) / total2023 * 100).toFixed(1);
+            
+            document.getElementById('total-2023').textContent = `£${total2023.toLocaleString()}`;
+            document.getElementById('total-2024').textContent = `£${total2024.toLocaleString()}`;
+            document.getElementById('growth').textContent = `${growth >= 0 ? '+' : ''}${growth}%`;
+        }
+    </script>
+</body>
+</html>
