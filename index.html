@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arun Pensions Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent1: #7209b7;
-            --accent2: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4cc9f0;
-            --warning: #f8961e;
-            --danger: #e63946;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent1: #3498db;
+            --accent2: #2980b9;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --card-bg: #ffffff;
+            --shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -29,32 +31,45 @@
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             color: var(--dark);
             min-height: 100vh;
             padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
             margin-bottom: 30px;
-            color: white;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        h1 i {
+            color: var(--accent1);
         }
 
         .subtitle {
             font-size: 1.2rem;
-            opacity: 0.9;
+            color: var(--secondary);
+            opacity: 0.8;
         }
 
         .tabs {
@@ -63,31 +78,36 @@
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             overflow-x: auto;
             box-shadow: var(--shadow);
+            margin-bottom: 0;
         }
 
         .tab {
-            padding: 15px 25px;
+            padding: 18px 30px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             border-bottom: 3px solid transparent;
             white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--secondary);
         }
 
         .tab.active {
-            border-bottom: 3px solid var(--primary);
-            color: var(--primary);
+            border-bottom: 3px solid var(--accent1);
+            color: var(--accent1);
         }
 
         .tab:hover:not(.active) {
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(52, 152, 219, 0.1);
         }
 
         .tab-content {
             display: none;
             background: var(--card-bg);
             border-radius: 0 0 var(--border-radius) var(--border-radius);
-            padding: 25px;
+            padding: 30px;
             box-shadow: var(--shadow);
             margin-bottom: 30px;
         }
@@ -98,38 +118,44 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .card {
             background: white;
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 25px;
             box-shadow: var(--shadow);
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: var(--transition);
+            border-left: 5px solid var(--accent1);
         }
 
         .card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
         }
 
         .card h3 {
             color: var(--secondary);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .card .value {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--primary);
         }
@@ -137,71 +163,180 @@
         .chart-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 20px;
+            padding: 25px;
             box-shadow: var(--shadow);
-            margin-bottom: 30px;
-            height: 400px;
+            margin-bottom: 40px;
+            height: 450px;
             position: relative;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .data-table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 0;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
         }
 
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
         }
 
         .data-table th {
-            background: var(--primary);
+            background: var(--secondary);
             color: white;
-            padding: 15px;
+            padding: 18px 15px;
             text-align: left;
+            font-weight: 600;
         }
 
         .data-table td {
-            padding: 12px 15px;
+            padding: 15px;
             border-bottom: 1px solid #eee;
+            transition: var(--transition);
         }
 
         .data-table tr:last-child td {
             border-bottom: none;
         }
 
-        .data-table tr:hover {
-            background: rgba(67, 97, 238, 0.05);
+        .data-table tr:hover td {
+            background: rgba(52, 152, 219, 0.05);
         }
 
         input[type="number"] {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 1rem;
-            transition: border 0.3s ease;
+            transition: var(--transition);
         }
 
         input[type="number"]:focus {
-            border-color: var(--primary);
+            border-color: var(--accent1);
             outline: none;
-        }
-
-        .year-header {
-            background: var(--secondary);
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
 
         .pension-name {
             font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 2px solid #eee;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--accent1);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--accent2);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent1);
+            color: var(--accent1);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent1);
+            color: white;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .year-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .year-input {
+            width: 120px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
@@ -211,144 +346,253 @@
             
             .tab {
                 border-bottom: 1px solid #eee;
-                border-left: 3px solid transparent;
+                border-left: 4px solid transparent;
+                justify-content: center;
             }
             
             .tab.active {
-                border-left: 3px solid var(--primary);
+                border-left: 4px solid var(--accent1);
                 border-bottom: 1px solid #eee;
             }
             
             .chart-container {
-                height: 300px;
+                height: 350px;
             }
             
             .data-table {
                 display: block;
                 overflow-x: auto;
             }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .positive {
+            color: var(--success);
+        }
+
+        .negative {
+            color: var(--danger);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Arun Pensions Dashboard</h1>
-            <p class="subtitle">Track and manage your pension investments</p>
+            <h1><i class="fas fa-chart-line"></i> Arun Pensions Dashboard</h1>
+            <p class="subtitle">Professional pension tracking and management</p>
         </header>
 
         <div class="tabs">
-            <div class="tab active" data-tab="dashboard">Dashboard</div>
-            <div class="tab" data-tab="nest">Nest Pension</div>
-            <div class="tab" data-tab="royal-london">Royal London</div>
-            <div class="tab" data-tab="baringa">Baringa</div>
+            <div class="tab active" data-tab="dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </div>
+            <div class="tab" data-tab="nest">
+                <i class="fas fa-piggy-bank"></i> Nest Pension
+            </div>
+            <div class="tab" data-tab="royal-london">
+                <i class="fas fa-landmark"></i> Royal London
+            </div>
+            <div class="tab" data-tab="baringa">
+                <i class="fas fa-chart-bar"></i> Baringa
+            </div>
         </div>
 
         <!-- Dashboard Tab -->
         <div class="tab-content active" id="dashboard">
-            <h2 class="year-header">Pension Summary</h2>
-            
             <div class="summary-cards">
                 <div class="card">
-                    <h3>Total Value (2023)</h3>
+                    <h3><i class="fas fa-pound-sign"></i> Total Value (2023)</h3>
                     <div class="value" id="total-2023">£4,200</div>
                 </div>
                 <div class="card">
-                    <h3>Total Value (2024)</h3>
+                    <h3><i class="fas fa-pound-sign"></i> Total Value (2024)</h3>
                     <div class="value" id="total-2024">£5,100</div>
                 </div>
                 <div class="card">
-                    <h3>Total Growth (2023-2024)</h3>
-                    <div class="value" id="growth">+21.4%</div>
+                    <h3><i class="fas fa-chart-line"></i> Total Growth (2023-2024)</h3>
+                    <div class="value positive" id="growth">+21.4%</div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-calendar-alt"></i> Years Tracked</h3>
+                    <div class="value" id="years-tracked">13</div>
                 </div>
             </div>
             
             <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Total Combined Pension Value</div>
+                    <div class="tooltip">
+                        <button class="btn btn-outline" id="add-year-btn">
+                            <i class="fas fa-plus"></i> Add Year
+                        </button>
+                        <span class="tooltiptext">Add a new year to track pension values</span>
+                    </div>
+                </div>
                 <canvas id="totalChart"></canvas>
             </div>
             
-            <h3>Combined Pension Values</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Nest</th>
-                        <th>Royal London</th>
-                        <th>Baringa</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody id="combined-table-body">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+            <div class="data-table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-table"></i> Combined Pension Values</h3>
+                    <div class="tooltip">
+                        <button class="btn" id="export-data-btn">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                        <span class="tooltiptext">Export pension data as CSV</span>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Nest</th>
+                            <th>Royal London</th>
+                            <th>Baringa</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="combined-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Nest Pension Tab -->
         <div class="tab-content" id="nest">
-            <h2 class="pension-name">Nest Pension</h2>
+            <h2 class="pension-name"><i class="fas fa-piggy-bank"></i> Nest Pension</h2>
+            
+            <div class="actions">
+                <div class="tooltip">
+                    <button class="btn" id="add-nest-year-btn">
+                        <i class="fas fa-plus"></i> Add Year for Nest
+                    </button>
+                    <span class="tooltiptext">Add a new year for Nest pension</span>
+                </div>
+            </div>
             
             <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Nest Pension Value Over Time</div>
+                </div>
                 <canvas id="nestChart"></canvas>
             </div>
             
-            <h3>Yearly Values</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Value (£)</th>
-                    </tr>
-                </thead>
-                <tbody id="nest-table-body">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+            <div class="data-table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Value (£)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nest-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Royal London Tab -->
         <div class="tab-content" id="royal-london">
-            <h2 class="pension-name">Royal London</h2>
+            <h2 class="pension-name"><i class="fas fa-landmark"></i> Royal London</h2>
+            
+            <div class="actions">
+                <div class="tooltip">
+                    <button class="btn" id="add-royal-london-year-btn">
+                        <i class="fas fa-plus"></i> Add Year for Royal London
+                    </button>
+                    <span class="tooltiptext">Add a new year for Royal London pension</span>
+                </div>
+            </div>
             
             <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Royal London Pension Value Over Time</div>
+                </div>
                 <canvas id="royalLondonChart"></canvas>
             </div>
             
-            <h3>Yearly Values</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Value (£)</th>
-                    </tr>
-                </thead>
-                <tbody id="royal-london-table-body">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+            <div class="data-table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Value (£)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="royal-london-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Baringa Tab -->
         <div class="tab-content" id="baringa">
-            <h2 class="pension-name">Baringa</h2>
+            <h2 class="pension-name"><i class="fas fa-chart-bar"></i> Baringa</h2>
+            
+            <div class="actions">
+                <div class="tooltip">
+                    <button class="btn" id="add-baringa-year-btn">
+                        <i class="fas fa-plus"></i> Add Year for Baringa
+                    </button>
+                    <span class="tooltiptext">Add a new year for Baringa pension</span>
+                </div>
+            </div>
             
             <div class="chart-container">
+                <div class="chart-header">
+                    <div class="chart-title">Baringa Pension Value Over Time</div>
+                </div>
                 <canvas id="baringaChart"></canvas>
             </div>
             
-            <h3>Yearly Values</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Value (£)</th>
-                    </tr>
-                </thead>
-                <tbody id="baringa-table-body">
-                    <!-- Will be populated by JavaScript -->
-                </tbody>
-            </table>
+            <div class="data-table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-table"></i> Yearly Values</h3>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Value (£)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="baringa-table-body">
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
+
+        <footer>
+            <p>Arun Pensions Dashboard &copy; 2023 | Professional Pension Tracking</p>
+        </footer>
     </div>
 
     <script>
@@ -356,7 +600,7 @@
         let pensionData = {
             nest: {
                 name: "Nest Pension",
-                color: "#4361ee",
+                color: "#3498db",
                 values: {
                     2018: 0,
                     2019: 0,
@@ -375,7 +619,7 @@
             },
             royalLondon: {
                 name: "Royal London",
-                color: "#f72585",
+                color: "#e74c3c",
                 values: {
                     2018: 0,
                     2019: 0,
@@ -394,7 +638,7 @@
             },
             baringa: {
                 name: "Baringa",
-                color: "#4cc9f0",
+                color: "#27ae60",
                 values: {
                     2018: 0,
                     2019: 0,
@@ -421,6 +665,15 @@
             baringaChart: null
         };
 
+        // Get all years from data
+        function getAllYears() {
+            const years = new Set();
+            Object.values(pensionData).forEach(pension => {
+                Object.keys(pension.values).forEach(year => years.add(parseInt(year)));
+            });
+            return Array.from(years).sort((a, b) => a - b);
+        }
+
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
             // Set up tab switching
@@ -441,16 +694,91 @@
                 });
             });
 
+            // Add year buttons
+            document.getElementById('add-year-btn').addEventListener('click', addYearForAll);
+            document.getElementById('add-nest-year-btn').addEventListener('click', () => addYearForPension('nest'));
+            document.getElementById('add-royal-london-year-btn').addEventListener('click', () => addYearForPension('royalLondon'));
+            document.getElementById('add-baringa-year-btn').addEventListener('click', () => addYearForPension('baringa'));
+
+            // Export data button
+            document.getElementById('export-data-btn').addEventListener('click', exportData);
+
             // Initialize all tables and charts
             initializeTables();
             initializeCharts();
             updateSummaryCards();
         });
 
+        // Add year for all pensions
+        function addYearForAll() {
+            const years = getAllYears();
+            const maxYear = Math.max(...years);
+            const newYear = maxYear + 1;
+            
+            // Add the new year to all pensions with value 0
+            Object.keys(pensionData).forEach(pensionKey => {
+                if (!pensionData[pensionKey].values[newYear]) {
+                    pensionData[pensionKey].values[newYear] = 0;
+                }
+            });
+            
+            // Update UI
+            initializeTables();
+            updateCharts();
+            updateSummaryCards();
+            
+            // Show success message
+            alert(`Successfully added year ${newYear} to all pensions with initial value of £0.`);
+        }
+
+        // Add year for specific pension
+        function addYearForPension(pensionKey) {
+            const years = getAllYears();
+            const maxYear = Math.max(...years);
+            const newYear = maxYear + 1;
+            
+            // Add the new year to the specific pension with value 0
+            if (!pensionData[pensionKey].values[newYear]) {
+                pensionData[pensionKey].values[newYear] = 0;
+            }
+            
+            // Update UI
+            initializeTables();
+            updateCharts();
+            updateSummaryCards();
+            
+            // Show success message
+            alert(`Successfully added year ${newYear} to ${pensionData[pensionKey].name} with initial value of £0.`);
+        }
+
+        // Export data as CSV
+        function exportData() {
+            const years = getAllYears();
+            let csv = "Year,Nest,Royal London,Baringa,Total\n";
+            
+            years.forEach(year => {
+                const nestValue = pensionData.nest.values[year] || 0;
+                const royalLondonValue = pensionData.royalLondon.values[year] || 0;
+                const baringaValue = pensionData.baringa.values[year] || 0;
+                const total = nestValue + royalLondonValue + baringaValue;
+                
+                csv += `${year},${nestValue},${royalLondonValue},${baringaValue},${total}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pension-data.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         // Initialize data tables
         function initializeTables() {
-            // Years from 2018 to 2030
-            const years = Array.from({length: 13}, (_, i) => 2018 + i);
+            const years = getAllYears();
             
             // Dashboard table
             const combinedTableBody = document.getElementById('combined-table-body');
@@ -477,6 +805,9 @@
             initializePensionTable('nest', years);
             initializePensionTable('royalLondon', years);
             initializePensionTable('baringa', years);
+            
+            // Update years tracked
+            document.getElementById('years-tracked').textContent = years.length;
         }
 
         // Initialize individual pension table
@@ -497,6 +828,11 @@
                                data-year="${year}"
                                onchange="updatePensionValue('${pensionKey}', ${year}, this.value)">
                     </td>
+                    <td>
+                        <button class="btn btn-outline" onclick="removeYear('${pensionKey}', ${year})">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </td>
                 `;
                 tableBody.appendChild(row);
             });
@@ -512,10 +848,26 @@
             updateSummaryCards();
         }
 
+        // Remove year from a pension
+        function removeYear(pensionKey, year) {
+            if (Object.keys(pensionData[pensionKey].values).length <= 1) {
+                alert("Cannot remove the only year for a pension.");
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to remove year ${year} from ${pensionData[pensionKey].name}?`)) {
+                delete pensionData[pensionKey].values[year];
+                
+                // Update UI
+                initializeTables();
+                updateCharts();
+                updateSummaryCards();
+            }
+        }
+
         // Initialize charts
         function initializeCharts() {
-            // Years from 2018 to 2030
-            const years = Array.from({length: 13}, (_, i) => 2018 + i);
+            const years = getAllYears();
             
             // Total combined chart
             const totalCtx = document.getElementById('totalChart').getContext('2d');
@@ -537,8 +889,8 @@
                     datasets: [{
                         label: 'Total Combined Value',
                         data: totalData,
-                        borderColor: '#3a0ca3',
-                        backgroundColor: 'rgba(58, 12, 163, 0.1)',
+                        borderColor: '#2c3e50',
+                        backgroundColor: 'rgba(44, 62, 80, 0.1)',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4
@@ -552,8 +904,7 @@
                             position: 'top',
                         },
                         title: {
-                            display: true,
-                            text: 'Total Combined Pension Value Over Time'
+                            display: false
                         }
                     },
                     scales: {
@@ -607,8 +958,7 @@
                             position: 'top',
                         },
                         title: {
-                            display: true,
-                            text: `${pensionData[pensionKey].name} Value Over Time`
+                            display: false
                         }
                     },
                     scales: {
@@ -653,7 +1003,10 @@
             
             document.getElementById('total-2023').textContent = `£${total2023.toLocaleString()}`;
             document.getElementById('total-2024').textContent = `£${total2024.toLocaleString()}`;
-            document.getElementById('growth').textContent = `${growth >= 0 ? '+' : ''}${growth}%`;
+            
+            const growthElement = document.getElementById('growth');
+            growthElement.textContent = `${growth >= 0 ? '+' : ''}${growth}%`;
+            growthElement.className = growth >= 0 ? 'value positive' : 'value negative';
         }
     </script>
 </body>
