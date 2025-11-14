@@ -485,8 +485,8 @@
             <div class="tab active" data-tab="dashboard">
                 <i class="fas fa-tachometer-alt"></i> Dashboard
             </div>
-            <div class="tab" data-tab="nest">
-                <i class="fas fa-piggy-bank"></i> Nest
+            <div class="tab" data-tab="capGemini">
+                <i class="fas fa-piggy-bank"></i> CapGemini
             </div>
             <div class="tab" data-tab="royalLondon">
                 <i class="fas fa-landmark"></i> Royal London
@@ -525,30 +525,30 @@
             </div>
         </div>
 
-        <!-- Nest Pension Tab -->
-        <div class="tab-content" id="nest">
-            <h2 class="pension-name"><i class="fas fa-piggy-bank"></i> Nest Pension</h2>
+        <!-- CapGemini Pension Tab -->
+        <div class="tab-content" id="capGemini">
+            <h2 class="pension-name"><i class="fas fa-piggy-bank"></i> CapGemini Pension</h2>
             
             <div class="mobile-actions">
-                <button class="mobile-btn" id="addNestYearBtnMobile">
-                    <i class="fas fa-plus"></i> Add Year for Nest
+                <button class="mobile-btn" id="addCapGeminiYearBtnMobile">
+                    <i class="fas fa-plus"></i> Add Year for CapGemini
                 </button>
             </div>
             
             <div class="actions desktop-actions">
                 <div class="tooltip">
-                    <button class="btn" id="addNestYearBtn">
-                        <i class="fas fa-plus"></i> Add Year for Nest
+                    <button class="btn" id="addCapGeminiYearBtn">
+                        <i class="fas fa-plus"></i> Add Year for CapGemini
                     </button>
-                    <span class="tooltiptext">Add a new year for Nest pension</span>
+                    <span class="tooltiptext">Add a new year for CapGemini pension</span>
                 </div>
             </div>
             
             <div class="chart-container">
                 <div class="chart-header">
-                    <div class="chart-title">Nest Pension Value Over Time</div>
+                    <div class="chart-title">CapGemini Pension Value Over Time</div>
                 </div>
-                <canvas id="nestChart"></canvas>
+                <canvas id="capGeminiChart"></canvas>
             </div>
             
             <div class="data-section">
@@ -564,7 +564,7 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="nestTableBody">
+                        <tbody id="capGeminiTableBody">
                             <!-- Will be populated by JavaScript -->
                         </tbody>
                     </table>
@@ -674,8 +674,8 @@
     <script>
         // Initial data from the Excel file
         let pensionData = {
-            nest: {
-                name: "Nest Pension",
+            capGemini: {
+                name: "CapGemini Pension",
                 color: "#3498db",
                 values: {
                     2018: 0,
@@ -736,7 +736,7 @@
         // Chart instances
         let chartInstances = {
             totalChart: null,
-            nestChart: null,
+            capGeminiChart: null,
             royalLondonChart: null,
             baringaChart: null
         };
@@ -771,12 +771,12 @@
             });
 
             // Add year buttons - desktop
-            document.getElementById('addNestYearBtn').addEventListener('click', () => addYearForPension('nest'));
+            document.getElementById('addCapGeminiYearBtn').addEventListener('click', () => addYearForPension('capGemini'));
             document.getElementById('addRoyalLondonYearBtn').addEventListener('click', () => addYearForPension('royalLondon'));
             document.getElementById('addBaringaYearBtn').addEventListener('click', () => addYearForPension('baringa'));
 
             // Add year buttons - mobile
-            document.getElementById('addNestYearBtnMobile').addEventListener('click', () => addYearForPension('nest'));
+            document.getElementById('addCapGeminiYearBtnMobile').addEventListener('click', () => addYearForPension('capGemini'));
             document.getElementById('addRoyalLondonYearBtnMobile').addEventListener('click', () => addYearForPension('royalLondon'));
             document.getElementById('addBaringaYearBtnMobile').addEventListener('click', () => addYearForPension('baringa'));
 
@@ -811,7 +811,7 @@
             const years = getAllYears();
             
             // Individual pension tables
-            initializePensionTable('nest', years);
+            initializePensionTable('capGemini', years);
             initializePensionTable('royalLondon', years);
             initializePensionTable('baringa', years);
             
@@ -881,7 +881,7 @@
             // Total combined chart
             const totalCtx = document.getElementById('totalChart').getContext('2d');
             const totalData = years.map(year => {
-                return (pensionData.nest.values[year] || 0) + 
+                return (pensionData.capGemini.values[year] || 0) + 
                        (pensionData.royalLondon.values[year] || 0) + 
                        (pensionData.baringa.values[year] || 0);
             });
@@ -952,7 +952,7 @@
             });
             
             // Individual pension charts
-            initializePensionChart('nest', years);
+            initializePensionChart('capGemini', years);
             initializePensionChart('royalLondon', years);
             initializePensionChart('baringa', years);
         }
@@ -1044,11 +1044,11 @@
 
         // Update summary cards
         function updateSummaryCards() {
-            const total2023 = (pensionData.nest.values[2023] || 0) + 
+            const total2023 = (pensionData.capGemini.values[2023] || 0) + 
                              (pensionData.royalLondon.values[2023] || 0) + 
                              (pensionData.baringa.values[2023] || 0);
             
-            const total2024 = (pensionData.nest.values[2024] || 0) + 
+            const total2024 = (pensionData.capGemini.values[2024] || 0) + 
                              (pensionData.royalLondon.values[2024] || 0) + 
                              (pensionData.baringa.values[2024] || 0);
             
