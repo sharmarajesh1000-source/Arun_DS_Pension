@@ -497,6 +497,26 @@
             .data-section {
                 padding: 20px;
             }
+
+            /* Fix for pension stats on mobile */
+            .pension-stats {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            
+            .stat {
+                padding: 12px !important;
+                min-height: auto !important;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem !important;
+            }
+            
+            .stat-label {
+                font-size: 0.75rem !important;
+                line-height: 1.2 !important;
+            }
         }
 
         @media (max-width: 480px) {
@@ -511,6 +531,15 @@
             .tab {
                 padding: 12px 15px;
                 font-size: 0.85rem;
+            }
+
+            /* Further adjustments for very small screens */
+            .pension-stats {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .stat-value {
+                font-size: 1.1rem !important;
             }
         }
 
@@ -917,7 +946,7 @@
                         </div>
                         <div class="stat">
                             <div class="stat-value">£300</div>
-                            <div class="stat-label">Annual</div>
+                            <div class="stat-label">Annual Return</div>
                         </div>
                     </div>
                 </div>
@@ -936,7 +965,7 @@
                         </div>
                         <div class="stat">
                             <div class="stat-value">£450</div>
-                            <div class="stat-label">Annual</div>
+                            <div class="stat-label">Annual Return</div>
                         </div>
                     </div>
                 </div>
@@ -955,7 +984,7 @@
                         </div>
                         <div class="stat">
                             <div class="stat-value">£0</div>
-                            <div class="stat-label">Annual</div>
+                            <div class="stat-label">Annual Return</div>
                         </div>
                     </div>
                 </div>
