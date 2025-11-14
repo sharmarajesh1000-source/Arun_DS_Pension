@@ -8,34 +8,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2c3e50;
-            --secondary: #34495e;
-            --accent1: #3498db;
-            --accent2: #2980b9;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --card-bg: #ffffff;
-            --shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            --border-radius: 10px;
-            --transition: all 0.3s ease;
+            --primary: #000000;
+            --secondary: #121212;
+            --accent1: #00cc66;
+            --accent2: #00aa55;
+            --success: #00cc66;
+            --warning: #ffcc00;
+            --danger: #ff4444;
+            --light: #f5f5f5;
+            --dark: #000000;
+            --card-bg: #1a1a1a;
+            --shadow: 0 8px 30px rgba(0, 204, 102, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --glass: rgba(30, 30, 30, 0.7);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: var(--dark);
+            background: linear-gradient(135deg, #000000 0%, #121212 100%);
+            color: var(--light);
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -45,21 +47,36 @@
 
         header {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: var(--card-bg);
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            color: var(--light);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
+            font-weight: 700;
         }
 
         h1 i {
@@ -67,23 +84,27 @@
         }
 
         .subtitle {
-            font-size: 1rem;
-            color: var(--secondary);
+            font-size: 1.1rem;
+            color: var(--light);
             opacity: 0.8;
+            font-weight: 300;
         }
 
         .tabs {
             display: flex;
-            background: var(--card-bg);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
             border-radius: var(--border-radius) var(--border-radius) 0 0;
             overflow-x: auto;
             box-shadow: var(--shadow);
             margin-bottom: 0;
             -webkit-overflow-scrolling: touch;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: none;
         }
 
         .tab {
-            padding: 15px 20px;
+            padding: 18px 25px;
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
@@ -91,26 +112,35 @@
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: var(--secondary);
+            gap: 10px;
+            color: var(--light);
             flex-shrink: 0;
+            opacity: 0.7;
+            position: relative;
+            overflow: hidden;
         }
 
         .tab.active {
             border-bottom: 3px solid var(--accent1);
             color: var(--accent1);
+            opacity: 1;
+            background: rgba(0, 204, 102, 0.05);
         }
 
         .tab:hover:not(.active) {
-            background: rgba(52, 152, 219, 0.1);
+            background: rgba(0, 204, 102, 0.1);
+            opacity: 0.9;
         }
 
         .tab-content {
             display: none;
-            background: var(--card-bg);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
             border-radius: 0 0 var(--border-radius) var(--border-radius);
             box-shadow: var(--shadow);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: none;
         }
 
         .tab-content.active {
@@ -119,97 +149,119 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .summary-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
         }
 
         .card {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 15px;
+            padding: 20px;
             box-shadow: var(--shadow);
             text-align: center;
             transition: var(--transition);
             border-left: 5px solid var(--accent1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 204, 102, 0.03) 0%, transparent 100%);
+            z-index: 0;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 204, 102, 0.2);
         }
 
         .card h3 {
-            color: var(--secondary);
-            margin-bottom: 10px;
-            font-size: 0.9rem;
+            color: var(--light);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 5px;
+            gap: 8px;
+            opacity: 0.8;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
         }
 
         .card .value {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--light);
+            position: relative;
+            z-index: 1;
         }
 
         .chart-container {
-            background: white;
-            border-radius: 0;
-            padding: 20px;
-            margin-bottom: 0;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 25px;
             height: 500px;
             position: relative;
             overflow: hidden;
-            border-bottom: 1px solid #eee;
+            box-shadow: var(--shadow);
         }
 
         .chart-header {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .chart-title {
-            font-size: 1.2rem;
-            color: var(--primary);
+            font-size: 1.3rem;
+            color: var(--light);
             font-weight: 600;
         }
 
         .data-section {
-            padding: 20px;
+            padding: 25px;
         }
 
         .data-table-container {
-            background: white;
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
             overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         .table-header {
-            background: var(--primary);
-            color: white;
-            padding: 15px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: var(--light);
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .table-header h3 {
             margin: 0;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
         .data-table {
@@ -222,17 +274,19 @@
         }
 
         .data-table th {
-            background: var(--secondary);
-            color: white;
-            padding: 12px 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--light);
+            padding: 15px 12px;
             text-align: left;
             font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .data-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             transition: var(--transition);
+            color: var(--light);
         }
 
         .data-table tr:last-child td {
@@ -240,71 +294,75 @@
         }
 
         .data-table tr:hover td {
-            background: rgba(52, 152, 219, 0.05);
+            background: rgba(0, 204, 102, 0.05);
         }
 
         input[type="number"] {
             width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             font-size: 1rem;
             transition: var(--transition);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--light);
         }
 
         input[type="number"]:focus {
             border-color: var(--accent1);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 204, 102, 0.2);
         }
 
         .pension-name {
             font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 15px;
-            padding: 20px 20px 0;
-            font-size: 1.5rem;
+            color: var(--light);
+            margin-bottom: 20px;
+            padding: 25px 25px 0;
+            font-size: 1.6rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn {
-            background: var(--accent1);
-            color: white;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: var(--dark);
             border: none;
-            padding: 10px 15px;
-            border-radius: 6px;
+            padding: 12px 20px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            gap: 8px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3);
         }
 
         .btn:hover {
-            background: var(--accent2);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 204, 102, 0.4);
         }
 
         .btn-outline {
             background: transparent;
             border: 2px solid var(--accent1);
             color: var(--accent1);
+            box-shadow: none;
         }
 
         .btn-outline:hover {
             background: var(--accent1);
-            color: white;
+            color: var(--dark);
         }
 
         .actions {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 0 20px;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 0 25px;
             flex-wrap: wrap;
         }
 
@@ -319,8 +377,8 @@
             background-color: var(--dark);
             color: white;
             text-align: center;
-            border-radius: 6px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 10px;
             position: absolute;
             z-index: 100;
             bottom: 125%;
@@ -329,6 +387,8 @@
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
         }
 
         .tooltip:hover .tooltiptext {
@@ -338,64 +398,66 @@
 
         .mobile-actions {
             display: none;
-            gap: 10px;
-            margin-bottom: 15px;
-            padding: 0 20px;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 0 25px;
             flex-wrap: wrap;
         }
 
         .mobile-btn {
-            background: var(--accent1);
-            color: white;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: var(--dark);
             border: none;
-            padding: 12px 15px;
-            border-radius: 6px;
+            padding: 15px 20px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            gap: 8px;
+            font-size: 0.95rem;
             width: 100%;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3);
         }
 
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
             
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.8rem;
             }
             
             .tab {
-                padding: 12px 15px;
+                padding: 15px 20px;
                 font-size: 0.9rem;
             }
             
             .summary-cards {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-                padding: 15px;
+                gap: 15px;
+                padding: 20px;
             }
             
             .card {
-                padding: 12px;
+                padding: 18px;
             }
             
             .card h3 {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
             }
             
             .card .value {
-                font-size: 1.2rem;
+                font-size: 1.5rem;
             }
             
             .chart-container {
-                height: 350px;
-                padding: 15px;
+                height: 400px;
+                padding: 20px;
+                margin: 20px;
             }
             
             .chart-title {
@@ -411,8 +473,8 @@
             }
             
             .pension-name {
-                font-size: 1.3rem;
-                padding: 15px 15px 0;
+                font-size: 1.4rem;
+                padding: 20px 20px 0;
             }
             
             .data-table {
@@ -420,20 +482,20 @@
             }
             
             .data-table th, .data-table td {
-                padding: 8px 6px;
+                padding: 10px 8px;
             }
             
             .btn {
-                padding: 8px 12px;
-                font-size: 0.85rem;
+                padding: 10px 15px;
+                font-size: 0.9rem;
             }
             
             .actions, .mobile-actions {
-                padding: 0 15px;
+                padding: 0 20px;
             }
             
             .data-section {
-                padding: 15px;
+                padding: 20px;
             }
         }
 
@@ -443,11 +505,11 @@
             }
             
             .chart-container {
-                height: 300px;
+                height: 350px;
             }
             
             .tab {
-                padding: 10px 12px;
+                padding: 12px 15px;
                 font-size: 0.85rem;
             }
         }
@@ -462,15 +524,335 @@
 
         footer {
             text-align: center;
-            padding: 15px;
-            color: var(--secondary);
-            font-size: 0.8rem;
-            margin-top: 30px;
+            padding: 20px;
+            color: var(--light);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            opacity: 0.7;
         }
 
         .dashboard-chart-container {
             height: 550px;
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            border-radius: var(--border-radius);
+        }
+
+        .glow {
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.3);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active {
+            background-color: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .pension-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 204, 102, 0.2);
+        }
+
+        .pension-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pension-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent1);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .pension-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px;
+        }
+
+        /* Predictor Styles */
+        .predictor-container {
+            padding: 25px;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .calculator-box {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .calculator-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light);
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--light);
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent1);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 204, 102, 0.2);
+        }
+
+        .input-group input:read-only {
+            background: rgba(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: not-allowed;
+        }
+
+        /* VERTICAL RESULTS LAYOUT */
+        .result-box {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            margin-top: 20px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .result-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+
+        .result-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent1);
+            margin: 15px 0;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .result-detail {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .result-detail-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .result-detail-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--light);
+            text-align: right;
+            flex: 1;
+        }
+
+        .predictor-table-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .predictor-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .predictor-table th {
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--light);
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .predictor-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            color: var(--light);
+        }
+
+        .predictor-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .predictor-table tr:hover td {
+            background: rgba(0, 204, 102, 0.05);
+        }
+
+        .calculate-btn-container {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            color: var(--dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3);
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 204, 102, 0.4);
+        }
+
+        /* Responsive fixes for predictor */
+        @media (max-width: 1024px) {
+            .result-value {
+                font-size: 1.8rem;
+            }
+            
+            .result-detail-value {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-value {
+                font-size: 1.6rem;
+            }
+            
+            .result-detail-value {
+                font-size: 1rem;
+            }
+            
+            .predictor-container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .result-value {
+                font-size: 1.4rem;
+            }
+            
+            .result-detail-value {
+                font-size: 0.9rem;
+            }
+            
+            .result-detail {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
+            }
+            
+            .result-detail-label, .result-detail-value {
+                text-align: center;
+            }
+            
+            .predictor-table th, 
+            .predictor-table td {
+                padding: 8px 6px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -494,6 +876,9 @@
             <div class="tab" data-tab="baringa">
                 <i class="fas fa-chart-bar"></i> Baringa
             </div>
+            <div class="tab" data-tab="predictor">
+                <i class="fas fa-calculator"></i> Predictor
+            </div>
         </div>
 
         <!-- Dashboard Tab -->
@@ -514,6 +899,65 @@
                 <div class="card">
                     <h3><i class="fas fa-calendar-alt"></i> Years</h3>
                     <div class="value" id="years-tracked">13</div>
+                </div>
+            </div>
+            
+            <div class="pension-overview">
+                <div class="pension-card">
+                    <h3><i class="fas fa-piggy-bank" style="color: #3498db;"></i> CapGemini Pension</h3>
+                    <p>Current value: <strong>£1,800</strong></p>
+                    <div class="pension-stats">
+                        <div class="stat">
+                            <div class="stat-value">+12.5%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">13</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">£300</div>
+                            <div class="stat-label">Annual</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pension-card">
+                    <h3><i class="fas fa-landmark" style="color: #e74c3c;"></i> Royal London</h3>
+                    <p>Current value: <strong>£3,300</strong></p>
+                    <div class="pension-stats">
+                        <div class="stat">
+                            <div class="stat-value">+26.9%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">9</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">£450</div>
+                            <div class="stat-label">Annual</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pension-card">
+                    <h3><i class="fas fa-chart-bar" style="color: #27ae60;"></i> Baringa</h3>
+                    <p>Current value: <strong>£0</strong></p>
+                    <div class="pension-stats">
+                        <div class="stat">
+                            <div class="stat-value">0%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">5</div>
+                            <div class="stat-label">Years</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">£0</div>
+                            <div class="stat-label">Annual</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -666,6 +1110,85 @@
             </div>
         </div>
 
+        <!-- Predictor Tab -->
+        <div class="tab-content" id="predictor">
+            <h2 class="pension-name"><i class="fas fa-calculator"></i> Pension Predictor</h2>
+            
+            <div class="predictor-container">
+                <div class="calculator-grid">
+                    <div class="calculator-box">
+                        <h3><i class="fas fa-chart-line"></i> Projection Calculator</h3>
+                        
+                        <div class="input-group">
+                            <label for="startingValue">Starting Value (£)</label>
+                            <input type="number" id="startingValue" readonly>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="yearlyContributions">Yearly Contributions (£)</label>
+                            <input type="number" id="yearlyContributions" value="5000">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="expectedGrowth">Expected Growth (%)</label>
+                            <input type="number" id="expectedGrowth" value="8" step="0.1">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="termYears">Term (years)</label>
+                            <input type="number" id="termYears" value="30">
+                        </div>
+                        
+                        <div class="calculate-btn-container">
+                            <button class="calculate-btn" id="calculateBtn">
+                                <i class="fas fa-calculator"></i> Calculate Projection
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-box">
+                        <h3><i class="fas fa-chart-bar"></i> Projection Results</h3>
+                        
+                        <div class="result-box">
+                            <h3>Total Return</h3>
+                            <div class="result-value" id="totalReturn">£921,659.17</div>
+                            
+                            <div class="result-details">
+                                <div class="result-detail">
+                                    <div class="result-detail-label">Total Contributions</div>
+                                    <div class="result-detail-value" id="totalContributions">£150,000.00</div>
+                                </div>
+                                <div class="result-detail">
+                                    <div class="result-detail-label">Total Growth</div>
+                                    <div class="result-detail-value" id="totalGrowth">£740,859.17</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="predictor-table-container">
+                    <div class="table-header">
+                        <h3><i class="fas fa-table"></i> Year-by-Year Breakdown</h3>
+                    </div>
+                    <table class="predictor-table">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Starting Value</th>
+                                <th>Contributions</th>
+                                <th>Growth</th>
+                                <th>Ending Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="predictorTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <footer>
             <p>Arun Pensions Dashboard &copy; 2023 | Professional Pension Tracking</p>
         </footer>
@@ -750,6 +1273,22 @@
             return Array.from(years).sort((a, b) => a - b);
         }
 
+        // Get the latest year from the data
+        function getLatestYear() {
+            const years = getAllYears();
+            return Math.max(...years);
+        }
+
+        // Calculate the total value of all pensions for the latest year
+        function getCurrentTotalValue() {
+            const latestYear = getLatestYear();
+            let total = 0;
+            Object.values(pensionData).forEach(pension => {
+                total += pension.values[latestYear] || 0;
+            });
+            return total;
+        }
+
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
             // Set up tab switching
@@ -767,6 +1306,11 @@
                     
                     // Update charts when switching tabs (fixes rendering issues)
                     setTimeout(updateCharts, 100);
+                    
+                    // If switching to predictor tab, update the starting value
+                    if (tabId === 'predictor') {
+                        updateStartingValue();
+                    }
                 });
             });
 
@@ -780,11 +1324,89 @@
             document.getElementById('addRoyalLondonYearBtnMobile').addEventListener('click', () => addYearForPension('royalLondon'));
             document.getElementById('addBaringaYearBtnMobile').addEventListener('click', () => addYearForPension('baringa'));
 
+            // Calculate button for predictor
+            document.getElementById('calculateBtn').addEventListener('click', calculateProjection);
+
             // Initialize all tables and charts
             initializeTables();
             initializeCharts();
             updateSummaryCards();
+            
+            // Initialize predictor starting value
+            updateStartingValue();
+            
+            // Run initial projection calculation
+            calculateProjection();
         });
+
+        // Update the starting value in the predictor
+        function updateStartingValue() {
+            const currentTotal = getCurrentTotalValue();
+            document.getElementById('startingValue').value = currentTotal;
+        }
+
+        // Calculate the pension projection
+        function calculateProjection() {
+            const startingValue = parseFloat(document.getElementById('startingValue').value) || 0;
+            const yearlyContributions = parseFloat(document.getElementById('yearlyContributions').value) || 0;
+            const expectedGrowth = parseFloat(document.getElementById('expectedGrowth').value) || 0;
+            const termYears = parseInt(document.getElementById('termYears').value) || 0;
+            
+            let currentValue = startingValue;
+            const breakdown = [];
+            let totalContributions = 0;
+            
+            // Calculate year by year
+            for (let year = 1; year <= termYears; year++) {
+                const startValue = currentValue;
+                const contributions = yearlyContributions;
+                totalContributions += contributions;
+                
+                // Add contributions at the end of the year
+                currentValue += contributions;
+                
+                // Apply growth
+                const growth = currentValue * (expectedGrowth / 100);
+                currentValue += growth;
+                
+                breakdown.push({
+                    year: year,
+                    startValue: startValue,
+                    contributions: contributions,
+                    growth: growth,
+                    endValue: currentValue
+                });
+            }
+            
+            // Update the results
+            const totalReturn = currentValue;
+            const totalGrowth = totalReturn - startingValue - totalContributions;
+            
+            document.getElementById('totalReturn').textContent = `£${totalReturn.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('totalContributions').textContent = `£${totalContributions.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('totalGrowth').textContent = `£${totalGrowth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Update the breakdown table
+            updateBreakdownTable(breakdown);
+        }
+
+        // Update the year-by-year breakdown table
+        function updateBreakdownTable(breakdown) {
+            const tableBody = document.getElementById('predictorTableBody');
+            tableBody.innerHTML = '';
+            
+            breakdown.forEach(yearData => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${yearData.year}</td>
+                    <td>£${yearData.startValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>£${yearData.contributions.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>£${yearData.growth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>£${yearData.endValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
 
         // Add year for specific pension
         function addYearForPension(pensionKey) {
@@ -855,6 +1477,12 @@
             initializeTables();
             updateCharts();
             updateSummaryCards();
+            
+            // Update predictor starting value if it's the latest year
+            const latestYear = getLatestYear();
+            if (year === latestYear) {
+                updateStartingValue();
+            }
         }
 
         // Remove year from a pension
@@ -871,6 +1499,9 @@
                 initializeTables();
                 updateCharts();
                 updateSummaryCards();
+                
+                // Update predictor starting value
+                updateStartingValue();
             }
         }
 
@@ -898,11 +1529,16 @@
                     datasets: [{
                         label: 'Total Combined Value',
                         data: totalData,
-                        borderColor: '#2c3e50',
-                        backgroundColor: 'rgba(44, 62, 80, 0.1)',
+                        borderColor: '#00cc66',
+                        backgroundColor: 'rgba(0, 204, 102, 0.1)',
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: '#00cc66',
+                        pointBorderColor: '#000000',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: {
@@ -919,6 +1555,12 @@
                     plugins: {
                         legend: {
                             position: 'top',
+                            labels: {
+                                color: '#f5f5f5',
+                                font: {
+                                    size: 14
+                                }
+                            }
                         },
                         title: {
                             display: false
@@ -929,7 +1571,8 @@
                             ticks: {
                                 padding: 10,
                                 maxRotation: 45,
-                                minRotation: 0
+                                minRotation: 0,
+                                color: '#f5f5f5'
                             },
                             grid: {
                                 display: false
@@ -941,10 +1584,11 @@
                                 callback: function(value) {
                                     return '£' + value.toLocaleString();
                                 },
-                                padding: 10
+                                padding: 10,
+                                color: '#f5f5f5'
                             },
                             grid: {
-                                color: 'rgba(0,0,0,0.05)'
+                                color: 'rgba(255, 255, 255, 0.05)'
                             }
                         }
                     }
@@ -978,7 +1622,12 @@
                         backgroundColor: hexToRgba(pensionData[pensionKey].color, 0.1),
                         borderWidth: 3,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: pensionData[pensionKey].color,
+                        pointBorderColor: '#000000',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: {
@@ -995,6 +1644,12 @@
                     plugins: {
                         legend: {
                             position: 'top',
+                            labels: {
+                                color: '#f5f5f5',
+                                font: {
+                                    size: 14
+                                }
+                            }
                         },
                         title: {
                             display: false
@@ -1005,7 +1660,8 @@
                             ticks: {
                                 padding: 10,
                                 maxRotation: 45,
-                                minRotation: 0
+                                minRotation: 0,
+                                color: '#f5f5f5'
                             },
                             grid: {
                                 display: false
@@ -1017,10 +1673,11 @@
                                 callback: function(value) {
                                     return '£' + value.toLocaleString();
                                 },
-                                padding: 10
+                                padding: 10,
+                                color: '#f5f5f5'
                             },
                             grid: {
-                                color: 'rgba(0,0,0,0.05)'
+                                color: 'rgba(255, 255, 255, 0.05)'
                             }
                         }
                     }
